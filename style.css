@@ -1271,15 +1271,14 @@ html, body {
   contain: layout style;
 }
 
-/* Desktop / tablet: real phone frame — AUTO SCALES with screen size (JS sets zoom) */
+/* Desktop / tablet: real phone frame */
 @media (min-width: 481px) {
   body { padding: 20px 12px !important; box-sizing: border-box !important; }
   .phone-shell {
     width: 390px;
-    height: 844px;
-    max-width: none;
-    max-height: none;
-    flex-shrink: 0;
+    max-width: min(390px, 100vw - 24px);
+    height: min(844px, 100dvh - 40px);
+    max-height: min(844px, 100dvh - 40px);
     border-radius: 40px;
     box-shadow:
       0 0 0 9px #0a0f1a,
