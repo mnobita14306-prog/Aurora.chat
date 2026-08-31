@@ -9298,3 +9298,50 @@ try{
 }catch{}
 
 renderChats();
+
+/* ===== AUTO-FIT PHONE SHELL =====
+   Screen size onujayi puro app automatic boro/choto hoy.
+   Boro monitor  -> phone frame + sob UI boro hoye scale kore
+   Choto laptop  -> choto hoye fit hoy
+   Real phone    (<=480px) -> full screen, kono scaling na  */
+(function(){
+  const BASE_W = 390, BASE_H = 844;   // phone frame er asol size
+  const PAD_X = 24, PAD_Y = 40;       // body padding + frame bezel er jayga
+
+  function fitShell(){
+    const shell = document.getElementById('phoneShell');
+    if(!shell) return;
+
+    // Real phone / choto screen: full screen thakbe, scaling off
+    if(window.innerWidth <= 480){
+      shell.style.zoom = '';
+      shell.style.transform = '';
+      return;
+    }
+
+    // Screen e koto boro kore fit korano jay — sei scale ta ber koro
+    const scale = Math.min(
+      (window.innerWidth  - PAD_X) / BASE_W,
+      (window.innerHeight - PAD_Y) / BASE_H
+    );
+
+    if('zoom' in shell.style){
+      shell.style.transform = '';
+      shell.style.zoom = scale;   // sob UI proportionally boro/choto hoy
+    } else {
+      // Fallback (purono browser): transform scale
+      shell.style.zoom = '';
+      shell.style.transformOrigin = 'center center';
+      shell.style.transform = 'translate3d(0,0,0) scale(' + scale + ')';
+    }
+  }
+
+  window.addEventListener('resize', fitShell);
+  window.addEventListener('orientationchange', fitShell);
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', fitShell);
+  } else {
+    fitShell();
+  }
+  setTimeout(fitShell, 120); // shell late create hole eo dhore fele
+})();
